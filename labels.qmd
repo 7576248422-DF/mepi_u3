@@ -1,0 +1,149 @@
+---
+title: "experimental labels"
+format:
+  html:
+    toc: true
+    toc-location: left
+    number-sections: true
+    self-contained: true
+    output-file: "labels"
+editor_options: 
+  chunk_output_type: console
+execute: 
+  echo: true
+  message: false
+  warning: false
+---
+
+# Setup
+
+```{r}
+#| label: setup
+
+source("https://inkaverse.com/setup.r")
+```
+
+# Field-book
+
+```{r}
+gs <- "https://docs.google.com/spreadsheets/d/1bai8d2NG7jvFz1fem7_QYP8zFKEPReQz5CQ_CRpO0IQ/edit?gid=252618836#gid=252618836" %>% 
+  as_sheets_id()
+
+fb <- gs %>% 
+  range_read(ss = ., sheet = "fb") %>% 
+  mutate(especie = "Solanum lycopersicum")
+
+view(fb)
+#> Google fonts: https://fonts.google.com/
+
+font <- c("Merriweather Sans", "Permanent Marker", "Tillana")
+huito_fonts(c(font, "Dancing Script"))
+
+# URLs directas desde Google Drive (formato uc?export=view&id=...)
+logo_universidad <- "https://drive.google.com/uc?export=view&id=1eNs9cCokGNGkODSGXXKMIk_wcnUbAPuc"
+logo_carrera     <- "https://drive.google.com/uc?export=view&id=1cBp-ugnOZlPJ5x_k-dnbvXn-eIhP9TQq"
+
+label <- fb %>%
+  label_layout(
+    size = c(5.2, 10)
+    , border_color = "forestgreen"
+    , border_width = 3
+  ) %>%
+  # Logo universidad (izquierda)
+  include_image(
+    value = logo_universidad
+    , size = c(2.2, 1.8)
+    , position = c(1.2, 9.1)
+  ) %>%
+  # Logo carrera (derecha)
+  include_image(
+    value = logo_carrera
+    , size = c(2.2, 1.8)
+    , position = c(4.0, 9.1)
+  ) %>%
+  # Nombre de especie en cursiva (entre logos y QR)
+  include_text(
+    value = "especie"
+    , position = c(2.6, 7.95)
+    , size = 11
+    , color = "darkgreen"
+    , font = "Dancing Script"
+  ) %>%
+  # Código QR único por planta
+  include_barcode(
+    value = "qrcode"
+    , size = c(4.2, 4.2)
+    , position = c(2.6, 5.55)
+    , type = "qrcode"
+  ) %>%
+  # Número de parcela
+  include_text(
+    value = "plots"
+    , position = c(2.6, 3.3)
+    , size = 18
+    , color = "black"
+    , font = font[3]
+    , prefix = "Parcela: "
+  ) %>%
+  # Tratamiento / fertilizante
+  include_text(
+    value = "fertilizantes"
+    , position = c(2.6, 2.6)
+    , size = 12
+    , color = "blue"
+    , font = font[1]
+  ) %>%
+  # Bloque | Fila | Columna en una sola línea
+  include_text(
+    value = "block"
+    , position = c(1.0, 1.9)
+    , size = 12
+    , color = "forestgreen"
+    , font = font[1]
+    , prefix = "Blq: "
+  ) %>%
+  include_text(
+    value = "rows"
+    , position = c(2.6, 1.9)
+    , size = 12
+    , color = "forestgreen"
+    , font = font[1]
+    , prefix = "Fila: "
+  ) %>%
+  include_text(
+    value = "cols"
+    , position = c(4.2, 1.9)
+    , size = 12
+    , color = "forestgreen"
+    , font = font[1]
+    , prefix = "Col: "
+  ) %>%
+  # Barra de escala al fondo
+  include_image(
+    value = "https://huito.inkaverse.com/img/scale.pdf"
+    , size = c(4.5, 0.8)
+    , position = c(2.6, 0.85)
+  )
+
+label %>% label_print(mode = "preview")
+
+label_print(
+  label,
+  mode = "complete",
+  filename = "design/labels_final",
+  paper = "a4",
+  units = "cm"
+)
+
+
+label %>% 
+  label_print(
+    mode = "complete",
+    filename = "C:/Users/HUAWEI/Downloads/git_unidad_2/proyecto_U_3/labels_final",
+    paper = "a4",
+    units = "cm"
+  )
+```
+
+  ) 
+
